@@ -139,8 +139,12 @@ public class ConsoleMain {
             System.out.println("\n[ERROR] Invalid year! Book not added.");
             return;
         }
-        libraryService.addBook(new Book(isbn, title, author, year));
-        System.out.println("\n[SUCCESS] Book added successfully!");
+        boolean success = libraryService.addBook(new Book(isbn, title, author, year));
+        if (success) {
+            System.out.println("\n[SUCCESS] Book added successfully!");
+        } else {
+            System.out.println("\n[FAILURE] Failed to add book! ISBN already exists.");
+        }
     }
     
     private static void listAllMembers() {
@@ -172,8 +176,12 @@ public class ConsoleMain {
         }
         System.out.print("Enter Member Name: ");
         String name = scanner.nextLine();
-        libraryService.addMember(new Member(id, name));
-        System.out.println("\n[SUCCESS] Member added successfully!");
+        boolean success = libraryService.addMember(new Member(id, name));
+        if (success) {
+            System.out.println("\n[SUCCESS] Member added successfully!");
+        } else {
+            System.out.println("\n[FAILURE] Failed to add member! ID already exists.");
+        }
     }
     
     private static void borrowBook() {

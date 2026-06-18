@@ -20,12 +20,30 @@ public class LibraryService {
         this.lock = new ReentrantLock();
     }
 
-    public void addBook(Book book) {
-        books.put(book.getISBN(), book);
+    public boolean addBook(Book book) {
+        lock.lock();
+        try {
+            if (books.containsKey(book.getISBN())) {
+                return false;
+            }
+            books.put(book.getISBN(), book);
+            return true;
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public void addMember(Member member) {
-        members.put(member.getId(), member);
+    public boolean addMember(Member member) {
+        lock.lock();
+        try {
+            if (members.containsKey(member.getId())) {
+                return false;
+            }
+            members.put(member.getId(), member);
+            return true;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public Book getBook(String ISBN) {
@@ -69,6 +87,18 @@ public class LibraryService {
             Book book = books.get(ISBN);
 
             if (member == null || book == null) {
+                return false;
+            }
+
+            // Check if the member actually has the book borrowed
+            boolean hasBorrowed = false;
+            for (Book b : member.getBorrowedBooks()) {
+                if (b.getISBN().equals(ISBN)) {
+                    hasBorrowed = true;
+                    break;
+                }
+            }
+            if (!hasBorrowed) {
                 return false;
             }
 
