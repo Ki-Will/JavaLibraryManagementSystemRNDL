@@ -97,4 +97,15 @@ public class LibraryService {
     public List<Member> getAllMembers() {
         return new ArrayList<>(members.values());
     }
+    
+    public void resetLibrary() {
+        for (Book book : books.values()) {
+            book.setAvailable(true);
+        }
+        for (Member member : members.values()) {
+            for (Book book : new ArrayList<>(member.getBorrowedBooks())) {
+                member.returnBook(book);
+            }
+        }
+    }
 }
