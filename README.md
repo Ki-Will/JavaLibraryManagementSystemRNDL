@@ -15,7 +15,10 @@ A Java-based library management system with object-oriented design, multi-thread
   - [Build and Run](#build-and-run)
 - [Usage Guide](#usage-guide)
   - [ConsoleMain: Interactive CLI](#consolemain-interactive-cli)
+    - [CLI Capabilities](#cli-capabilities)
+    - [Run the CLI](#run-the-cli)
   - [Main: Quick Test Application](#main-quick-test-application)
+    - [Run the Test App](#run-the-test-app)
 - [Persistence with JDBC](#persistence-with-jdbc)
 
 ---
@@ -118,25 +121,36 @@ Now you're ready to run one of the two main applications!
 
 This is the main interactive application designed for librarians to manage the library system directly from the terminal.
 
-**What it Does**:
-- Provides a user-friendly, menu-driven interface
-- Allows full CRUD operations for books and members (create, read, update, delete)
-- Handles borrowing/returning logic
-- Includes a concurrent borrowing simulation tool
+#### CLI Capabilities
+ConsoleMain provides a comprehensive, user-friendly interface with the following capabilities:
+- **Book Management**:
+  - List all books (including borrowed ones)
+  - List only available books for borrowing
+  - Add new books (enforces unique ISBNs)
+- **Member Management**:
+  - List all registered members and their borrowed books
+  - Add new members (enforces unique member IDs)
+- **Borrowing & Returning**:
+  - Allow members to borrow books (checks availability and max 5-book limit)
+  - Allow members to return books (only if they actually borrowed it)
+- **Concurrent Simulation**:
+  - Run a multi-threaded test to simulate multiple librarians processing borrow requests simultaneously
+- **Data Reset**:
+  - Reset the in-memory library state to initial conditions
 
-**What it Utilizes**:
+#### What it Utilizes
 - `LibraryService` (core service class with in-memory collections)
 - `Book` and `Member` model classes
 - `BorrowTask` and `ExecutorService` for concurrent operations
 - `ReentrantLock` to ensure thread-safe access to shared data
 - `System.in` and `System.out` for interactive user input/output
 
-**Run Command**:
+#### Run the CLI
 ```powershell
 mvn exec:java "-Dexec.mainClass=ConsoleMain"
 ```
 
-**Menu Options**:
+#### Menu Options
 - **1 - List All Books**: Shows every book in the library (including borrowed)
 - **2 - List Available Books**: Shows only books that are currently available to borrow
 - **3 - Add Book**: Add a new book to the library (enter ISBN, title, author, and year)
@@ -145,6 +159,7 @@ mvn exec:java "-Dexec.mainClass=ConsoleMain"
 - **6 - Borrow Book**: Allow a member to borrow a book (checks member ID, ISBN, availability, and max 5 books)
 - **7 - Return Book**: Allow a member to return a book
 - **8 - Simulate Concurrent Borrowing**: Run a multi-threaded test where multiple librarians try to borrow books at the same time
+- **9 - Reset Library State**: Resets the library to its initial state
 - **0 - Exit**: Close the application
 
 ---
@@ -153,14 +168,14 @@ mvn exec:java "-Dexec.mainClass=ConsoleMain"
 
 This is a simple, non-interactive test application that quickly demonstrates the core functionality of the system without requiring user input.
 
-**What it Does**:
-- Initializes library with 4 sample books and 3 sample members
+#### What it Does
+- Initializes library with sample books and members
 - Displays initial list of available books
 - Spawns multiple concurrent librarian threads to test simultaneous borrowing
 - Shows results of the concurrent test (which members borrowed which books, available books after test)
 - Demonstrates returning a book and checks updated availability
 
-**What it Utilizes**:
+#### What it Utilizes
 - `LibraryService` (core service class with in-memory collections)
 - `Book` and `Member` model classes
 - `BorrowTask` class to represent each concurrent borrow operation
@@ -168,7 +183,7 @@ This is a simple, non-interactive test application that quickly demonstrates the
 - `ReentrantLock` to ensure thread-safe access to the library state
 - Direct `System.out.println()` for displaying test output
 
-**Run Command**:
+#### Run the Test App
 ```powershell
 mvn exec:java "-Dexec.mainClass=Main"
 ```
